@@ -1,16 +1,19 @@
-# Define the provider
+# main.tf
+
 provider "aws" {
   region = var.aws_region
 }
 
-# Use workspace name to differentiate environments
 resource "aws_instance" "web" {
-  ami           = "ami-0c02fb55956c7d316" # Amazon Linux 2 AMI
-  instance_type = "t2.micro"
+  ami           = "ami-0c02fb55956c7d316" # Amazon Linux 2
+  instance_type = var.instance_type
 
-  tags = {
-    Name = "${terraform.workspace}-web-server"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name        = "${terraform.workspace}-web-server"
+    }
+  )
 }
 
 # Output instance details
